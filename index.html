@@ -3,7 +3,19 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>FlowArrow — 流れる矢印GIFジェネレーター</title>
+<title>流れる矢印GIFジェネレーター｜Googleスライド用の動く矢印を作る無料ツール - FlowArrow</title>
+<meta name="description" content="「流れる矢印」のアニメーションGIFをブラウザだけで作成。Googleスライド・PowerPoint・Notionに貼れる透過GIFを、好きな形(M字・曲線)とスタイルで。無料・登録不要。" />
+<meta name="keywords" content="流れる矢印, 矢印 アニメーション, 矢印 GIF, GIF 作成, Googleスライド 矢印 動かす, 動く矢印, flowing arrow gif" />
+<link rel="canonical" href="https://yutoab.github.io/flowarrow/" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="FlowArrow｜流れる矢印GIFジェネレーター" />
+<meta property="og:description" content="Googleスライドに貼れる「流れる矢印」の透過GIFを、ブラウザだけで作成。無料・登録不要。" />
+<meta property="og:url" content="https://yutoab.github.io/flowarrow/" />
+<meta property="og:image" content="https://yutoab.github.io/flowarrow/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="FlowArrow｜流れる矢印GIFジェネレーター" />
+<meta name="twitter:description" content="Googleスライドに貼れる「流れる矢印」の透過GIFを、ブラウザだけで作成。" />
+<meta name="twitter:image" content="https://yutoab.github.io/flowarrow/og.png" />
 <style>
   :root { --bg:#0f1115; --panel:#181b22; --line:#2a2f3a; --txt:#e6e8ee; --muted:#9aa3b2; --accent:#4f8cff; }
   * { box-sizing:border-box; }
@@ -40,12 +52,21 @@
   hr { border:none; border-top:1px solid var(--line); margin:14px 0; }
   #status { font-size:12px; color:var(--muted); margin-top:8px; min-height:16px; }
   .val { color:var(--txt); float:right; font-variant-numeric:tabular-nums; }
+  .content { max-width:860px; margin:8px auto 40px; padding:0 20px; line-height:1.85; }
+  .content h2 { font-size:20px; margin:30px 0 8px; }
+  .content p, .content li { color:#c7cdda; font-size:15px; }
+  .content .faq dt { font-weight:600; margin-top:14px; color:#e6e8ee; }
+  .content .faq dd { margin:4px 0 0; color:#aab2c2; }
+  .content a { color:var(--accent); }
+  .adslot { max-width:860px; margin:14px auto; min-height:90px; display:flex; align-items:center; justify-content:center; color:#3a4150; font-size:12px; border:1px dashed #2a2f3a; border-radius:8px; }
+  footer { text-align:center; color:var(--muted); font-size:13px; padding:24px; border-top:1px solid var(--line); }
+  footer a { color:var(--accent); }
 </style>
 </head>
 <body>
 <header>
-  <h1>FlowArrow</h1>
-  <span>流れる矢印を描いて、透過GIFで書き出す</span>
+  <h1>FlowArrow｜流れる矢印GIFジェネレーター</h1>
+  <span>流れる矢印を描いて、Googleスライドに貼れる透過GIFで書き出す</span>
 </header>
 
 <div class="wrap">
@@ -115,6 +136,54 @@
     <div id="status"></div>
   </div>
 </div>
+
+<!-- 広告枠: AdSenseは独自ドメイン＋審査通過後にここへ <ins> タグを差し込む(現在はプレースホルダ) -->
+<div class="adslot">広告枠(準備中)</div>
+
+<section class="content">
+  <h2>「流れる矢印」のアニメGIFをブラウザで作成</h2>
+  <p>FlowArrow は、<b>流れる矢印</b>のアニメーションGIFを無料で作れるツールです。始点から終点へパスを描き、破線や「≫」が流れる動き、または線が伸びていく「描かれる」動きを選んで、<b>透過GIF</b>として書き出せます。書き出したGIFは <b>Googleスライド</b>・PowerPoint・Notion・Keynote などに「画像として挿入」するだけで、編集中も発表中もループ再生されます。</p>
+
+  <h2>使い方</h2>
+  <ol>
+    <li>キャンバスをクリックして点を追加(最初=始点 / 最後=終点)。点はドラッグで移動できます。</li>
+    <li>プリセット(直線・フック・M字・S字)から始めてもOK。</li>
+    <li>動き(流れる/描かれる)・スタイル・色・太さ・間隔・速さを調整。</li>
+    <li>「フチ合わせ色」を貼り先の背景色に合わせると、透過GIFのフチが目立ちません。</li>
+    <li>「GIF書き出し」→ ダウンロードしたGIFをスライドに挿入。</li>
+  </ol>
+
+  <h2>なぜGoogleスライドで矢印は「流れない」のか</h2>
+  <p>Googleスライドのアニメーションは Appear / Fade / Fly in / Zoom / Spin などに限られ、矢印を始点から終点へ流す「ワイプ」やモーションパスがありません。さらに Google スライドの API ではアニメーションを設定できないため、プラグインで後付けすることもできません。そこで現実的な解決策が、<b>あらかじめ動くGIFを作って貼る</b>方法です。FlowArrow はそのGIFを数十秒で作れます。</p>
+
+  <h2>よくある質問</h2>
+  <dl class="faq">
+    <dt>Googleスライドで矢印を動かせますか？</dt>
+    <dd>標準機能では「流れる」動きは作れません。FlowArrow で作った流れる矢印GIFを画像として挿入すれば、ループ再生で実現できます。</dd>
+    <dt>PowerPoint との違いは？</dt>
+    <dd>PowerPoint は「ワイプ」やモーションパスで矢印を流せます。Googleスライドにはそれが無いため、GIFで補うのがFlowArrowの役割です(PowerPointでもGIFは使えます)。</dd>
+    <dt>透過GIFのフチが気になります。</dt>
+    <dd>GIFの透明は2値のため、貼り先の背景色と「フチ合わせ色」を一致させると目立ちません。</dd>
+    <dt>商用利用できますか？</dt>
+    <dd>作成したGIFはあなたのものです。資料・スライド・動画などに自由に使えます。</dd>
+    <dt>登録やインストールは必要ですか？</dt>
+    <dd>不要です。すべてブラウザ内で動作し、画像はあなたの端末で生成されます。</dd>
+  </dl>
+</section>
+
+<footer>
+  作者 <a href="https://x.com/ReactYuto" target="_blank" rel="noopener">@ReactYuto</a> ・
+  <a href="https://github.com/yutoAb/flowarrow" target="_blank" rel="noopener">GitHub</a>
+</footer>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Googleスライドで矢印を動かせますか？","acceptedAnswer":{"@type":"Answer","text":"標準機能では流れる動きは作れません。FlowArrowで作った流れる矢印GIFを画像として挿入すれば、ループ再生で実現できます。"}},
+{"@type":"Question","name":"PowerPointとの違いは？","acceptedAnswer":{"@type":"Answer","text":"PowerPointはワイプやモーションパスで矢印を流せます。Googleスライドにはそれが無いため、GIFで補うのがFlowArrowの役割です。"}},
+{"@type":"Question","name":"商用利用できますか？","acceptedAnswer":{"@type":"Answer","text":"作成したGIFはあなたのものです。資料・スライド・動画などに自由に使えます。"}},
+{"@type":"Question","name":"登録やインストールは必要ですか？","acceptedAnswer":{"@type":"Answer","text":"不要です。すべてブラウザ内で動作し、画像はあなたの端末で生成されます。"}}
+]}
+</script>
 
 <script src="vendor/gif.js"></script>
 <script>
