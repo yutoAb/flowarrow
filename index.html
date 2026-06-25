@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FlowArrow — 流れる矢印GIFジェネレーター</title>
+<style>
+  :root { --bg:#0f1115; --panel:#181b22; --line:#2a2f3a; --txt:#e6e8ee; --muted:#9aa3b2; --accent:#4f8cff; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,"Hiragino Kaku Gothic ProN",sans-serif; background:var(--bg); color:var(--txt); }
+  header { padding:14px 20px; border-bottom:1px solid var(--line); display:flex; align-items:baseline; gap:12px; }
+  header h1 { font-size:18px; margin:0; }
+  header span { color:var(--muted); font-size:13px; }
+  .wrap { display:flex; gap:16px; padding:16px; align-items:flex-start; flex-wrap:wrap; }
+  .stage { flex:1 1 560px; }
+  .canvas-box {
+    background-image:
+      linear-gradient(45deg,#20242c 25%,transparent 25%),
+      linear-gradient(-45deg,#20242c 25%,transparent 25%),
+      linear-gradient(45deg,transparent 75%,#20242c 75%),
+      linear-gradient(-45deg,transparent 75%,#20242c 75%);
+    background-size:24px 24px; background-position:0 0,0 12px,12px -12px,-12px 0;
+    background-color:#171a20; border:1px solid var(--line); border-radius:10px; overflow:hidden;
+  }
+  canvas { display:block; width:100%; height:auto; cursor:crosshair; touch-action:none; }
+  .panel { flex:0 0 300px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:14px; }
+  .row { margin:10px 0; }
+  .row label { display:block; font-size:12px; color:var(--muted); margin-bottom:4px; }
+  input[type=range]{ width:100%; }
+  select, input[type=color], input[type=number] { background:#10131a; color:var(--txt); border:1px solid var(--line); border-radius:6px; padding:6px; }
+  input[type=number]{ width:74px; }
+  .btns { display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; }
+  button { background:#222734; color:var(--txt); border:1px solid var(--line); border-radius:7px; padding:8px 12px; cursor:pointer; font-size:13px; }
+  button:hover { border-color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600; }
+  .hint { font-size:12px; color:var(--muted); line-height:1.6; }
+  .seg { display:flex; gap:6px; }
+  .seg button { flex:1; }
+  .seg button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  hr { border:none; border-top:1px solid var(--line); margin:14px 0; }
+  #status { font-size:12px; color:var(--muted); margin-top:8px; min-height:16px; }
+  .val { color:var(--txt); float:right; font-variant-numeric:tabular-nums; }
+</style>
+</head>
+<body>
+<header>
+  <h1>FlowArrow</h1>
+  <span>流れる矢印を描いて、透過GIFで書き出す</span>
+</header>
+
+<div class="wrap">
+  <div class="stage">
+    <div class="canvas-box"><canvas id="cv" width="900" height="470"></canvas></div>
+    <p class="hint">
+      キャンバスを<b>クリックして点を追加</b>(最初の点=始点 / 最後の点=終点・矢じり)。点は<b>ドラッグで移動</b>。
+      3点以上で曲線(M字など)になります。
+    </p>
+  </div>
+
+  <div class="panel">
+    <div class="row">
+      <label>プリセット</label>
+      <div class="btns">
+        <button data-preset="straight">直線</button>
+        <button data-preset="hook">フック</button>
+        <button data-preset="m">M字</button>
+        <button data-preset="s">S字</button>
+      </div>
+    </div>
+    <div class="row">
+      <label>動き</label>
+      <div class="seg" id="mode">
+        <button data-mode="flow" class="on">流れる</button>
+        <button data-mode="draw">描かれる</button>
+      </div>
+    </div>
+    <div class="row">
+      <label>スタイル</label>
+      <div class="seg" id="style">
+        <button data-style="dash" class="on">破線</button>
+        <button data-style="chevron">≫</button>
+      </div>
+    </div>
+    <div class="row"><label>色</label><input type="color" id="color" value="#5f6368"></div>
+    <div class="row"><label>太さ <span class="val" id="thickV"></span></label><input type="range" id="thick" min="4" max="60" value="20"></div>
+    <div class="row"><label>間隔 <span class="val" id="spaceV"></span>(0=実線)</label><input type="range" id="space" min="0" max="180" value="86"></div>
+    <div class="row"><label>速さ(px/秒) <span class="val" id="speedV"></span></label><input type="range" id="speed" min="40" max="600" value="240"></div>
+    <div class="row">
+      <label><input type="checkbox" id="head" checked> 終点に「く」の字の矢じり</label>
+    </div>
+    <hr>
+    <div class="row">
+      <label>フチ合わせ色(スライド背景色に合わせる)</label>
+      <input type="color" id="matte" value="#ffffff">
+      <span class="hint">この色がGIFで透明になります。スライドの背景色に合わせるとフチが目立ちません。</span>
+    </div>
+    <div class="row">
+      <label>書き出しサイズ</label>
+      <div class="btns">
+        <span class="hint">幅 <input type="number" id="ow" value="900"> × 高 <input type="number" id="oh" value="470"></span>
+      </div>
+    </div>
+    <div class="row">
+      <label>コマ数 / FPS</label>
+      <div class="btns">
+        <span class="hint"><input type="number" id="frames" value="24"> コマ / <input type="number" id="fps" value="14"> fps</span>
+      </div>
+    </div>
+    <hr>
+    <div class="btns">
+      <button id="undo">1点戻す</button>
+      <button id="clear">クリア</button>
+      <button id="export" class="primary">GIF書き出し</button>
+    </div>
+    <div id="status"></div>
+  </div>
+</div>
+
+<script src="vendor/gif.js"></script>
+<script>
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+let pts = [];
+let dragIdx = -1;
+
+const S = {
+  mode:'flow', style:'dash', color:'#5f6368', thick:20, space:86, speed:240, head:true,
+  matte:'#ffffff', frames:24, fps:14
+};
+
+// ---- geometry engine (ported & validated) ----
+function catmull(p0,p1,p2,p3,t){
+  const t2=t*t,t3=t2*t;
+  const c=(a,b,cc,d)=>0.5*((2*b)+(-a+cc)*t+(2*a-5*b+4*cc-d)*t2+(-a+3*b-3*cc+d)*t3);
+  return [c(p0[0],p1[0],p2[0],p3[0]), c(p0[1],p1[1],p2[1],p3[1])];
+}
+function buildPath(points){
+  if(points.length<2) return null;
+  const fine=[]; const n=points.length;
+  for(let i=0;i<n-1;i++){
+    const p0=i>0?points[i-1]:points[0], p1=points[i], p2=points[i+1], p3=i+2<n?points[i+2]:points[n-1];
+    const seg=Math.max(12, Math.hypot(p2[0]-p1[0],p2[1]-p1[1])/4|0);
+    for(let k=0;k<seg;k++) fine.push(catmull(p0,p1,p2,p3,k/seg));
+  }
+  fine.push(points[n-1]);
+  const cum=[0];
+  for(let i=1;i<fine.length;i++) cum.push(cum[i-1]+Math.hypot(fine[i][0]-fine[i-1][0],fine[i][1]-fine[i-1][1]));
+  return {fine,cum,total:cum[cum.length-1]};
+}
+function at(P,s){
+  s=Math.max(0,Math.min(P.total,s));
+  let lo=1,hi=P.cum.length-1;
+  while(lo<hi){const m=(lo+hi)>>1; if(P.cum[m]<s) lo=m+1; else hi=m;}
+  const i=lo, s0=P.cum[i-1], s1=P.cum[i], f=s1>s0?(s-s0)/(s1-s0):0;
+  const x=P.fine[i-1][0]+(P.fine[i][0]-P.fine[i-1][0])*f;
+  const y=P.fine[i-1][1]+(P.fine[i][1]-P.fine[i-1][1])*f;
+  const j=Math.min(P.fine.length-1,i+1);
+  const ang=Math.atan2(P.fine[j][1]-P.fine[i-1][1], P.fine[j][0]-P.fine[i-1][0]);
+  return {x,y,ang};
+}
+function strokePoly(c,P,s0,s1){
+  c.beginPath(); let first=true;
+  for(let s=s0;s<s1;s+=7){const q=at(P,s); if(first){c.moveTo(q.x,q.y);first=false;}else c.lineTo(q.x,q.y);}
+  const e=at(P,s1); c.lineTo(e.x,e.y); c.stroke();
+}
+function chevron(c,x,y,ang,size){
+  const fx=Math.cos(ang),fy=Math.sin(ang),nx=-fy,ny=fx;
+  c.beginPath();
+  c.moveTo(x-fx*size+nx*size, y-fy*size+ny*size);
+  c.lineTo(x+fx*size, y+fy*size);
+  c.lineTo(x-fx*size-nx*size, y-fy*size-ny*size);
+  c.stroke();
+}
+function drawBody(c, P, bodyEnd, phasePx){
+  if(bodyEnd<=0) return;
+  c.strokeStyle=S.color; c.fillStyle=S.color; c.lineWidth=S.thick; c.lineCap='round'; c.lineJoin='round';
+  const period=S.space;
+  if(period < 1){ strokePoly(c,P,0,bodyEnd); return; }   // 間隔0 = 隙間なしの実線
+  const dashLen=Math.max(4, period*0.52);
+  let s=(phasePx%period)-period;
+  while(s<bodyEnd){
+    if(S.style==='chevron'){ if(s>=0 && s<bodyEnd){const q=at(P,s); chevron(c,q.x,q.y,q.ang,S.thick*1.05);} }
+    else { const a=Math.max(0,s), b=Math.min(s+dashLen,bodyEnd); if(b>a) strokePoly(c,P,a,b); }
+    s+=period;
+  }
+}
+function drawHead(c, P, sPos){
+  c.strokeStyle=S.color; c.lineWidth=S.thick; c.lineCap='round'; c.lineJoin='round';
+  const head=S.thick*2.4, e=at(P,sPos), ha=38*Math.PI/180;
+  for(const sgn of [1,-1]){
+    const ax=e.x-head*Math.cos(e.ang+sgn*ha), ay=e.y-head*Math.sin(e.ang+sgn*ha);
+    c.beginPath(); c.moveTo(ax,ay); c.lineTo(e.x,e.y); c.stroke();
+  }
+}
+const HOLD=0.18;
+function smooth(p){ return p*p*(3-2*p); }
+// u in [0,1) is the loop fraction (same for live preview and export)
+function drawScene(c, P, u){
+  if(!P) return;
+  const head = S.head ? S.thick*2.4 : 0;
+  if(S.mode==='draw'){
+    let p = u < (1-HOLD) ? u/(1-HOLD) : 1;   // grow, then hold full before looping
+    const reveal = smooth(p)*P.total;
+    drawBody(c, P, reveal-head*0.7, 0);       // static body, revealed up to the moving tip
+    if(S.head && reveal>head*0.7) drawHead(c, P, reveal);  // head leads the growth
+  } else {
+    drawBody(c, P, P.total-head*0.7, u*S.space);  // marching flow (one period per loop)
+    if(S.head) drawHead(c, P, P.total);
+  }
+}
+
+// ---- live preview ----
+let path=null;
+function rebuild(){ path=buildPath(pts); }
+function frame(now){
+  ctx.clearRect(0,0,cv.width,cv.height);
+  let u;
+  if(S.mode==='draw'){
+    const total = path ? path.total : 600;
+    const cycle = Math.max(0.3, total/Math.max(40,S.speed)/(1-HOLD)); // sec per loop
+    u = (now/1000/cycle) % 1;
+  } else {
+    u = ((now/1000)*S.speed / S.space) % 1;
+  }
+  drawScene(ctx, path, u);
+  // editing handles
+  pts.forEach((p,i)=>{ ctx.fillStyle = i===0 ? '#4f8cff' : '#cfd6e4';
+    ctx.beginPath(); ctx.arc(p[0],p[1], i===0?7:5, 0, 7); ctx.fill(); });
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+// ---- canvas interaction ----
+function pos(e){
+  const r=cv.getBoundingClientRect();
+  return [ (e.clientX-r.left)*cv.width/r.width, (e.clientY-r.top)*cv.height/r.height ];
+}
+cv.addEventListener('pointerdown', e=>{
+  const [x,y]=pos(e);
+  dragIdx = pts.findIndex(p=>Math.hypot(p[0]-x,p[1]-y)<14);
+  if(dragIdx<0){ pts.push([x,y]); rebuild(); }
+  cv.setPointerCapture(e.pointerId);
+});
+cv.addEventListener('pointermove', e=>{
+  if(dragIdx<0) return; const [x,y]=pos(e); pts[dragIdx]=[x,y]; rebuild();
+});
+cv.addEventListener('pointerup', ()=>{ dragIdx=-1; });
+
+// ---- controls ----
+const $=id=>document.getElementById(id);
+function bindRange(id,key,fmt){ const el=$(id),v=$(id+'V');
+  const upd=()=>{S[key]=+el.value; if(v)v.textContent=fmt?fmt(el.value):el.value;}; el.oninput=upd; upd(); }
+bindRange('thick','thick'); bindRange('space','space'); bindRange('speed','speed');
+$('color').oninput=e=>S.color=e.target.value;
+$('matte').oninput=e=>S.matte=e.target.value;
+$('head').onchange=e=>S.head=e.target.checked;
+document.querySelectorAll('#style button').forEach(b=>b.onclick=()=>{
+  S.style=b.dataset.style; document.querySelectorAll('#style button').forEach(x=>x.classList.toggle('on',x===b));
+});
+document.querySelectorAll('#mode button').forEach(b=>b.onclick=()=>{
+  S.mode=b.dataset.mode; document.querySelectorAll('#mode button').forEach(x=>x.classList.toggle('on',x===b));
+});
+$('undo').onclick=()=>{ pts.pop(); rebuild(); };
+$('clear').onclick=()=>{ pts=[]; rebuild(); };
+
+const PRESETS={
+  straight:[[80,235],[820,235]],
+  hook:[[820,120],[470,110],[420,360],[110,330]],
+  m:[[820,330],[650,120],[460,350],[270,120],[100,330]],
+  s:[[100,360],[330,120],[570,360],[810,120]],
+};
+document.querySelectorAll('[data-preset]').forEach(b=>b.onclick=()=>{
+  pts=PRESETS[b.dataset.preset].map(p=>p.slice()); rebuild();
+});
+pts=PRESETS.m.map(p=>p.slice()); rebuild();
+
+// ---- GIF export ----
+function hexInt(h){ return parseInt(h.replace('#',''),16); }
+$('export').onclick=()=>{
+  if(!path){ $('status').textContent='点を2つ以上置いてください。'; return; }
+  const ow=+$('ow').value, oh=+$('oh').value, frames=+$('frames').value, fps=+$('fps').value;
+  const off=document.createElement('canvas'); off.width=ow; off.height=oh;
+  const oc=off.getContext('2d');
+  const sx=ow/cv.width, sy=oh/cv.height;
+  const gif=new GIF({workers:2, quality:8, width:ow, height:oh,
+    workerScript:'vendor/gif.worker.js', transparent:hexInt(S.matte)});
+  for(let f=0; f<frames; f++){
+    oc.setTransform(1,0,0,1,0,0);
+    oc.fillStyle=S.matte; oc.fillRect(0,0,ow,oh);
+    oc.setTransform(sx,0,0,sy,0,0);
+    drawScene(oc, path, f/frames);   // u = f/frames covers exactly one loop (flow or draw)
+    gif.addFrame(oc, {copy:true, delay:Math.round(1000/fps)});
+  }
+  $('status').textContent='エンコード中…';
+  gif.on('progress', p=>{ $('status').textContent='エンコード中… '+Math.round(p*100)+'%'; });
+  gif.on('finished', blob=>{
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+    a.download='flow-arrow.gif'; a.click();
+    $('status').textContent='完了！flow-arrow.gif をダウンロードしました。';
+  });
+  gif.render();
+};
+</script>
+</body>
+</html>
