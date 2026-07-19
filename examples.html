@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>作例ギャラリー｜流れる矢印GIFのサンプルと設定レシピ - FlowArrow</title>
+<meta name="description" content="FlowArrowで作れる「流れる矢印」GIFの作例集。直線・M字・S字・カーブの4パターンを、再現できる設定レシピ付きで紹介。すべて無料でそのまま使えます。" />
+<link rel="canonical" href="https://flow-arrow.com/examples.html" />
+<link rel="icon" href="/favicon.ico" sizes="32x32" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7822984542952708" crossorigin="anonymous"></script>
+<style>
+  :root { --bg:#0f1115; --panel:#181b22; --line:#2a2f3a; --txt:#e6e8ee; --muted:#9aa3b2; --accent:#4f8cff; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,"Hiragino Kaku Gothic ProN",sans-serif; background:var(--bg); color:var(--txt); line-height:1.9; }
+  header { padding:14px 20px; border-bottom:1px solid var(--line); display:flex; align-items:baseline; gap:12px; }
+  header h1 { font-size:18px; margin:0; }
+  header h1 a { color:var(--txt); text-decoration:none; }
+  header span { color:var(--muted); font-size:13px; }
+  main { max-width:960px; margin:0 auto; padding:24px 20px 40px; }
+  main h1 { font-size:24px; }
+  a { color:var(--accent); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:20px; margin-top:20px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  .card .shot { background:#fff; padding:10px; }
+  .card img { width:100%; display:block; }
+  .card .body { padding:14px 16px 18px; }
+  .card h2 { font-size:16px; margin:0 0 8px; }
+  .recipe { font-size:13px; color:var(--muted); }
+  .recipe b { color:var(--txt); font-weight:600; }
+  .use { font-size:13px; margin-top:8px; }
+  .cta { display:inline-block; background:var(--accent); color:#fff; text-decoration:none; padding:10px 22px; border-radius:8px; font-weight:bold; margin:24px 0 8px; }
+  .note { background:var(--panel); border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:8px; padding:12px 16px; margin:24px 0; font-size:14px; }
+  footer { padding:18px 20px 28px; border-top:1px solid var(--line); color:var(--muted); font-size:13px; text-align:center; }
+  footer a { color:var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <h1><a href="/">FlowArrow</a></h1>
+  <span>流れる矢印GIFジェネレーター</span>
+</header>
+<main>
+  <h1>作例ギャラリー — 設定レシピ付き</h1>
+  <p><a href="/">FlowArrow</a>で作れる流れる矢印GIFのサンプル集です。各カードの「レシピ」どおりに設定すれば、同じものがすぐ作れます。GIFはすべて白のフチ合わせ色で書き出した透過GIFで、白背景のスライドにそのまま貼れる状態です(画像を右クリック→保存でそのまま使ってもOKです)。</p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="shot"><img src="/examples/example-straight.gif" alt="直線の流れる矢印GIF(青・破線)" loading="lazy" /></div>
+      <div class="body">
+        <h2>直線フロー(青)</h2>
+        <div class="recipe">プリセット: <b>直線</b> / 動き: <b>フロー</b> / スタイル: <b>破線</b> / 色: <b>#4f8cff</b> / 太さ: <b>16</b> / 間隔: <b>広め</b></div>
+        <div class="use">用途: システム構成図のデータフロー、AからBへの単純な流れの強調に。</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="shot"><img src="/examples/example-m.gif" alt="M字カーブの流れる矢印GIF(グレー・破線)" loading="lazy" /></div>
+      <div class="body">
+        <h2>M字カーブ(グレー)</h2>
+        <div class="recipe">プリセット: <b>M字</b> / 動き: <b>フロー</b> / スタイル: <b>破線</b> / 色: <b>#5f6368</b> / 太さ: <b>14</b></div>
+        <div class="use">用途: 行ったり来たりする往復プロセス、紆余曲折を経るフローの表現に。Googleスライドのテーマに馴染むグレーです。</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="shot"><img src="/examples/example-s.gif" alt="S字カーブの流れる矢印GIF(緑・破線)" loading="lazy" /></div>
+      <div class="body">
+        <h2>S字カーブ(緑)</h2>
+        <div class="recipe">プリセット: <b>S字</b> / 動き: <b>フロー</b> / スタイル: <b>破線</b> / 色: <b>#34a853</b> / 太さ: <b>14</b></div>
+        <div class="use">用途: 成長曲線・改善サイクルなどポジティブな流れの演出に。緑は「進行中・成功」の印象を与えます。</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="shot"><img src="/examples/example-hook.gif" alt="カーブを描いて伸びる矢印GIF(赤・実線)" loading="lazy" /></div>
+      <div class="body">
+        <h2>伸びるカーブ(赤・描画モード)</h2>
+        <div class="recipe">プリセット: <b>フック</b> / 動き: <b>描画</b> / スタイル: <b>実線</b> / 色: <b>#ea4335</b> / 太さ: <b>14</b></div>
+        <div class="use">用途: 「ここに注目」の指し示し、結論への誘導に。線が伸びて対象を指すので視線誘導が強力です。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>ダーク背景のスライドで使う場合</b>: これらのサンプルは白背景用(フチ合わせ色=白)です。ダークテーマのスライドに貼る場合は、FlowArrowでフチ合わせ色をスライドの背景色に設定して書き出し直すと、フチが目立ちません。詳しくは<a href="/guide-google-slides.html">使い方ガイド</a>をご覧ください。
+  </div>
+
+  <p style="text-align:center"><a class="cta" href="/">自分の矢印GIFを作ってみる →</a></p>
+</main>
+<footer>
+  <a href="/">ホーム</a> ・
+  <a href="/examples.html">作例ギャラリー</a> ・
+  <a href="/guide-google-slides.html">使い方ガイド</a> ・
+  <a href="/privacy.html">プライバシーポリシー</a><br>
+  作者 <a href="https://x.com/ReactYuto" target="_blank" rel="noopener">@ReactYuto</a> ・
+  <a href="https://github.com/yutoAb/flowarrow" target="_blank" rel="noopener">GitHub</a>
+</footer>
+</body>
+</html>
