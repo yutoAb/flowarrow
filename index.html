@@ -25,7 +25,10 @@
   :root { --bg:#0f1115; --panel:#181b22; --line:#2a2f3a; --txt:#e6e8ee; --muted:#9aa3b2; --accent:#4f8cff; }
   * { box-sizing:border-box; }
   body { margin:0; font-family:-apple-system,"Hiragino Kaku Gothic ProN",sans-serif; background:var(--bg); color:var(--txt); }
-  header { padding:14px 20px; border-bottom:1px solid var(--line); display:flex; align-items:baseline; gap:12px; }
+  header { padding:14px 20px; border-bottom:1px solid var(--line); display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+  .gnav { margin-left:auto; display:flex; gap:14px; font-size:13px; }
+  .gnav a { color:var(--muted); text-decoration:none; }
+  .gnav a:hover { color:var(--accent); }
   header h1 { font-size:18px; margin:0; }
   header span { color:var(--muted); font-size:13px; }
   .wrap { display:flex; gap:16px; padding:16px; align-items:flex-start; flex-wrap:wrap; }
@@ -72,6 +75,12 @@
 <header>
   <h1>FlowArrow｜流れる矢印GIFジェネレーター</h1>
   <span>流れる矢印を描いて、Googleスライドに貼れる透過GIFで書き出す</span>
+  <nav class="gnav">
+    <a href="/examples.html">作例</a>
+    <a href="/guide-google-slides.html">Googleスライド</a>
+    <a href="/guide-powerpoint.html">PowerPoint</a>
+    <a href="/design-tips.html">デザインのコツ</a>
+  </nav>
 </header>
 
 <div class="wrap">

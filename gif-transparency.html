@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>透過GIFの「白いフチ」はなぜ出る?仕組みと消し方｜2値アルファとマット色 - FlowArrow</title>
+<meta name="description" content="透過GIFをスライドに貼るとフチが白く(または黒く)見える理由を、GIFの2値アルファとマット処理の仕組みから解説。フチを消す具体的な方法と、APNG・WebMとの違いも紹介します。" />
+<link rel="canonical" href="https://flow-arrow.com/gif-transparency.html" />
+<link rel="icon" href="/favicon.ico" sizes="32x32" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7822984542952708" crossorigin="anonymous"></script>
+<style>
+  :root { --bg:#0f1115; --panel:#181b22; --line:#2a2f3a; --txt:#e6e8ee; --muted:#9aa3b2; --accent:#4f8cff; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,"Hiragino Kaku Gothic ProN",sans-serif; background:var(--bg); color:var(--txt); line-height:1.9; }
+  header { padding:14px 20px; border-bottom:1px solid var(--line); display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+  header h1 { font-size:18px; margin:0; }
+  header h1 a { color:var(--txt); text-decoration:none; }
+  header nav { margin-left:auto; display:flex; gap:14px; font-size:13px; }
+  header nav a { color:var(--muted); text-decoration:none; }
+  header nav a:hover { color:var(--accent); }
+  main { max-width:860px; margin:0 auto; padding:24px 20px 40px; }
+  main h1 { font-size:24px; line-height:1.5; }
+  main h2 { font-size:19px; margin-top:40px; border-left:4px solid var(--accent); padding-left:10px; }
+  a { color:var(--accent); }
+  ol, ul { padding-left:22px; }
+  li { margin:6px 0; }
+  .tip { background:var(--panel); border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:8px; padding:12px 16px; margin:16px 0; }
+  .cta { display:inline-block; background:var(--accent); color:#fff; text-decoration:none; padding:10px 22px; border-radius:8px; font-weight:bold; margin:8px 0; }
+  table { border-collapse:collapse; width:100%; font-size:14px; }
+  th, td { border:1px solid var(--line); padding:8px 10px; text-align:left; }
+  th { background:var(--panel); }
+  code { background:var(--panel); border:1px solid var(--line); border-radius:4px; padding:1px 6px; font-size:13px; }
+  .related { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:14px 18px; margin-top:36px; }
+  .related h2 { border:none; padding:0; font-size:15px; margin:0 0 8px; }
+  .related ul { margin:0; }
+  footer { padding:18px 20px 28px; border-top:1px solid var(--line); color:var(--muted); font-size:13px; text-align:center; }
+  footer a { color:var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <h1><a href="/">FlowArrow</a></h1>
+  <nav>
+    <a href="/examples.html">作例</a>
+    <a href="/guide-google-slides.html">Googleスライド</a>
+    <a href="/guide-powerpoint.html">PowerPoint</a>
+    <a href="/design-tips.html">デザインのコツ</a>
+  </nav>
+</header>
+<main>
+  <h1>透過GIFの「白いフチ」はなぜ出る?<br>— 2値アルファとマット色の仕組みから消し方まで</h1>
+  <p>透過GIFをダークカラーのスライドに貼ったら、線のまわりに<b>白いフチ</b>がうっすら見えた — 誰もが一度は踏む罠です。これはツールのバグではなく、<b>GIFという画像形式の仕様</b>によるものです。仕組みを知れば確実に消せます。</p>
+
+  <h2>原因: GIFの透明は「あり/なし」の2値しかない</h2>
+  <p>PNGの透明度(アルファチャンネル)は0〜255の256段階あり、「半分だけ透明」なピクセルを表現できます。文字や線のフチのなめらかさ(アンチエイリアス)は、この半透明ピクセルが背景と混ざることで実現されています。</p>
+  <p>一方、<b>GIFの透明は「完全に透明」か「完全に不透明」かの2値</b>しかありません。アルファ値でいえば0か255だけで、中間がないのです。そのため、フチのなめらかな半透明部分をGIFにするときは、次のどちらかを選ぶしかありません。</p>
+  <ul>
+    <li>半透明ピクセルを<b>捨てる</b> → フチがギザギザ(ジャギー)になる</li>
+    <li>半透明ピクセルを<b>何かの色と混ぜて不透明にする</b> → なめらかだが、混ぜた色が焼き込まれる</li>
+  </ul>
+  <p>この「混ぜる色」が<b>マット色(matte)</b>です。FlowArrowの「フチ合わせ色」はこのマット色のことです。</p>
+
+  <h2>白いフチの正体</h2>
+  <p>マット色を白のまま書き出したGIFは、線のフチに「線の色と白を混ぜた中間色」のピクセルを持っています。白背景に貼れば完全に馴染みますが、<b>ダーク背景に貼るとその中間色だけが浮いて見える</b> — これが白いフチの正体です。逆に、黒マットで書き出したGIFを白背景に貼れば黒いフチが見えます。</p>
+
+  <h2>消し方: マット色を貼り先の背景色に合わせる</h2>
+  <ol>
+    <li>貼り先のスライドの背景色を調べる(Googleスライド: 背景 → 色 / PowerPoint: デザイン → 背景の書式設定)。カラーコード(<code>#202124</code> など)を控える</li>
+    <li><a href="/">FlowArrow</a>の「フチ合わせ色」にその色を指定する</li>
+    <li>書き出し直して貼り替える</li>
+  </ol>
+  <div class="tip"><b>背景がグラデーションや写真の場合</b>: 一色に合わせられないため、フチは完全には消せません。グラデーションの中間あたりの色をマット色にして目立ちにくくするか、矢印の通り道だけ単色の帯を敷くレイアウトに変えるのが現実的です。</div>
+
+  <h2>ほかの形式ではダメなのか? — APNG・WebM・Lottieとの比較</h2>
+  <table>
+    <tr><th>形式</th><th>半透明</th><th>Googleスライド</th><th>PowerPoint</th><th>Notion</th></tr>
+    <tr><td>GIF</td><td>×(2値)</td><td>◎ 自動ループ再生</td><td>◎ スライドショーで再生</td><td>◎</td></tr>
+    <tr><td>APNG</td><td>◎ 256段階</td><td>×(静止画扱い)</td><td>×(静止画扱い)</td><td>△(環境による)</td></tr>
+    <tr><td>WebM(動画)</td><td>◯(対応コーデックなら)</td><td>△ 動画扱い・自動再生に制約</td><td>◯ 動画として挿入</td><td>◯</td></tr>
+    <tr><td>Lottie(JSON)</td><td>◎</td><td>×</td><td>×</td><td>×</td></tr>
+  </table>
+  <p>半透明を完全に扱えるAPNGやLottieは、肝心のスライドツールがアニメーションとして再生してくれません。<b>「どこに貼っても確実にループ再生される」のは今もGIFだけ</b>で、だからこそマット色での運用が現実解になっています。</p>
+
+  <h2>ファイルサイズを抑えるコツ</h2>
+  <p>GIFは古い形式なのでサイズが膨らみがちです。スライドに貼る用途なら以下で十分軽くなります。</p>
+  <ul>
+    <li><b>寸法を貼るサイズに合わせる</b> — スライド上で幅400pxで使うなら、800pxで書き出す必要はありません</li>
+    <li><b>フレーム数を欲張らない</b> — ループする動きは1周期分だけあればよく、24フレーム前後で十分なめらかです</li>
+    <li><b>色数はもともと少ない</b> — 単色の矢印なら数十色に収まり、GIFの256色制限は問題になりません</li>
+  </ul>
+
+  <p><a class="cta" href="/">FlowArrowで透過GIFを作る →</a></p>
+
+  <div class="related">
+    <h2>関連記事</h2>
+    <ul>
+      <li><a href="/guide-google-slides.html">Googleスライドに「動く矢印」を入れる方法</a></li>
+      <li><a href="/design-tips.html">動く矢印を「うるさくしない」デザインのコツ7選</a></li>
+      <li><a href="/examples.html">作例ギャラリー(設定レシピ付き)</a></li>
+    </ul>
+  </div>
+</main>
+<footer>
+  <a href="/">ホーム</a> ・
+  <a href="/examples.html">作例ギャラリー</a> ・
+  <a href="/guide-google-slides.html">使い方ガイド</a> ・
+  <a href="/privacy.html">プライバシーポリシー</a><br>
+  作者 <a href="https://x.com/ReactYuto" target="_blank" rel="noopener">@ReactYuto</a> ・
+  <a href="https://github.com/yutoAb/flowarrow" target="_blank" rel="noopener">GitHub</a>
+</footer>
+</body>
+</html>

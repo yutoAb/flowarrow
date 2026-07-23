@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PowerPointで「流れる矢印」を作る3つの方法｜ワイプ・モーションパス・GIF比較 - FlowArrow</title>
+<meta name="description" content="PowerPointで矢印を流れるように動かす方法を3つ紹介。標準のワイプアニメーション、モーションパス、アニメーションGIFの手順と使い分けを、メリット・デメリット付きで解説します。" />
+<link rel="canonical" href="https://flow-arrow.com/guide-powerpoint.html" />
+<link rel="icon" href="/favicon.ico" sizes="32x32" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7822984542952708" crossorigin="anonymous"></script>
+<style>
+  :root { --bg:#0f1115; --panel:#181b22; --line:#2a2f3a; --txt:#e6e8ee; --muted:#9aa3b2; --accent:#4f8cff; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,"Hiragino Kaku Gothic ProN",sans-serif; background:var(--bg); color:var(--txt); line-height:1.9; }
+  header { padding:14px 20px; border-bottom:1px solid var(--line); display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+  header h1 { font-size:18px; margin:0; }
+  header h1 a { color:var(--txt); text-decoration:none; }
+  header nav { margin-left:auto; display:flex; gap:14px; font-size:13px; }
+  header nav a { color:var(--muted); text-decoration:none; }
+  header nav a:hover { color:var(--accent); }
+  main { max-width:860px; margin:0 auto; padding:24px 20px 40px; }
+  main h1 { font-size:24px; line-height:1.5; }
+  main h2 { font-size:19px; margin-top:40px; border-left:4px solid var(--accent); padding-left:10px; }
+  main h3 { font-size:16px; margin-top:28px; }
+  a { color:var(--accent); }
+  ol, ul { padding-left:22px; }
+  li { margin:6px 0; }
+  .tip { background:var(--panel); border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:8px; padding:12px 16px; margin:16px 0; }
+  .cta { display:inline-block; background:var(--accent); color:#fff; text-decoration:none; padding:10px 22px; border-radius:8px; font-weight:bold; margin:8px 0; }
+  table { border-collapse:collapse; width:100%; font-size:14px; }
+  th, td { border:1px solid var(--line); padding:8px 10px; text-align:left; }
+  th { background:var(--panel); }
+  .related { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:14px 18px; margin-top:36px; }
+  .related h2 { border:none; padding:0; font-size:15px; margin:0 0 8px; }
+  .related ul { margin:0; }
+  footer { padding:18px 20px 28px; border-top:1px solid var(--line); color:var(--muted); font-size:13px; text-align:center; }
+  footer a { color:var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <h1><a href="/">FlowArrow</a></h1>
+  <nav>
+    <a href="/examples.html">作例</a>
+    <a href="/guide-google-slides.html">Googleスライド</a>
+    <a href="/guide-powerpoint.html">PowerPoint</a>
+    <a href="/design-tips.html">デザインのコツ</a>
+  </nav>
+</header>
+<main>
+  <h1>PowerPointで「流れる矢印」を作る3つの方法<br>— ワイプ・モーションパス・GIFの使い分け</h1>
+  <p>PowerPointはGoogleスライドと違い、標準機能だけでも矢印を動かす手段が用意されています。この記事では、<b>ワイプアニメーション</b>・<b>モーションパス</b>・<b>アニメーションGIF</b>の3つの方法を手順付きで解説し、どれをいつ使うべきかを整理します。</p>
+
+  <h2>方法1: ワイプアニメーション(いちばん簡単)</h2>
+  <p>矢印が始点から終点に向かって「描かれていく」動きは、ワイプで作れます。</p>
+  <ol>
+    <li>矢印の図形(挿入 → 図形 → 矢印)をスライドに置く</li>
+    <li>矢印を選択した状態で <b>アニメーション → ワイプ</b> を選ぶ</li>
+    <li><b>効果のオプション</b>で方向を矢印の向きに合わせる(右向き矢印なら「左から」)</li>
+    <li>継続時間を0.5〜1秒程度に設定</li>
+  </ol>
+  <p>ワイプは「一度だけ描かれる」動きです。発表中に何度も流れ続けてほしい場合は、アニメーションウィンドウで<b>「繰り返し: スライドの最後まで」</b>を設定します(効果のオプション → タイミング タブ)。</p>
+  <div class="tip"><b>制約</b>: ワイプは直線・L字など単純な形には有効ですが、曲線の矢印だと「描かれる方向」と「線の向き」が合わず不自然になることがあります。</div>
+
+  <h2>方法2: モーションパス(図形を移動させる)</h2>
+  <p>矢印そのものを飛ばすのではなく、丸や小さい図形を「矢印に沿って移動」させて流れを表現する方法です。</p>
+  <ol>
+    <li>経路を示す矢印(静止)を描く</li>
+    <li>動かしたい図形(小さな丸など)を置く</li>
+    <li><b>アニメーション → その他のモーションパス</b>、または<b>ユーザー設定パス</b>で経路を描く</li>
+    <li>タイミングで「繰り返し」を設定するとループします</li>
+  </ol>
+  <p>「パケットが流れる」「荷物が運ばれる」ような、<b>実体が経路上を移動する</b>表現に向いています。</p>
+
+  <h2>方法3: アニメーションGIFを貼る(曲線・破線の流れはこれ一択)</h2>
+  <p>破線が流れ続ける動き(いわゆる「マーチングアンツ」)や、M字・S字など複雑な曲線に沿った流れは、PowerPointの標準アニメーションでは作れません。ここは<b>あらかじめ動くGIFを作って貼る</b>のが現実解です。</p>
+  <ol>
+    <li><a href="/">FlowArrow</a>でパスを描き、流れる矢印の透過GIFを書き出す(無料・登録不要)</li>
+    <li>PowerPointで <b>挿入 → 画像</b> からGIFを選択</li>
+    <li>フチ合わせ色をスライドの背景色に合わせておくとフチが見えません</li>
+  </ol>
+  <p>GIFは編集画面では静止して見えますが、<b>スライドショーを開始すると自動でループ再生</b>されます。</p>
+  <p><a class="cta" href="/">FlowArrowで矢印GIFを作る →</a></p>
+
+  <h2>3つの方法の使い分け</h2>
+  <table>
+    <tr><th>方法</th><th>得意な表現</th><th>ループ</th><th>曲線対応</th><th>Googleスライド互換</th></tr>
+    <tr><td>ワイプ</td><td>一度だけ描かれる直線矢印</td><td>設定すれば可</td><td>△(不自然になりがち)</td><td>×(変換で消える)</td></tr>
+    <tr><td>モーションパス</td><td>実体が経路を移動</td><td>設定すれば可</td><td>◯</td><td>×(変換で消える)</td></tr>
+    <tr><td>GIF</td><td>破線が流れ続ける・複雑な曲線</td><td>常にループ</td><td>◎</td><td>◎(そのまま動く)</td></tr>
+  </table>
+  <div class="tip"><b>Googleスライドと共用するなら最初からGIF</b>がおすすめです。PowerPointのアニメーション設定は、Googleスライドにインポートするとすべて失われますが、GIFは画像なのでそのまま動き続けます。逆方向(Googleスライド→PowerPoint)でも同じです。</div>
+
+  <h2>まとめ</h2>
+  <ul>
+    <li>一度だけ描かれる直線矢印 → <b>ワイプ</b></li>
+    <li>実体が経路上を移動する表現 → <b>モーションパス</b></li>
+    <li>流れ続ける破線・複雑な曲線・Googleスライドとの共用 → <b>GIF(FlowArrow)</b></li>
+  </ul>
+
+  <div class="related">
+    <h2>関連記事</h2>
+    <ul>
+      <li><a href="/guide-google-slides.html">Googleスライドに「動く矢印」を入れる方法</a></li>
+      <li><a href="/design-tips.html">動く矢印を「うるさくしない」デザインのコツ</a></li>
+      <li><a href="/examples.html">作例ギャラリー(設定レシピ付き)</a></li>
+    </ul>
+  </div>
+</main>
+<footer>
+  <a href="/">ホーム</a> ・
+  <a href="/examples.html">作例ギャラリー</a> ・
+  <a href="/guide-google-slides.html">使い方ガイド</a> ・
+  <a href="/privacy.html">プライバシーポリシー</a><br>
+  作者 <a href="https://x.com/ReactYuto" target="_blank" rel="noopener">@ReactYuto</a> ・
+  <a href="https://github.com/yutoAb/flowarrow" target="_blank" rel="noopener">GitHub</a>
+</footer>
+</body>
+</html>
