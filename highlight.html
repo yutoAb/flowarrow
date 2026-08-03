@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>丸で囲む・下線・マーカーの強調アニメGIF作成｜スライドの注目ポイントを動きで見せる - FlowArrow</title>
+<meta name="description" content="手書き風に「丸で囲む」「下線を引く」「マーカーを引く」強調アニメーションGIFをブラウザだけで作成。Googleスライド・PowerPointの文字や図の上に重ねるだけで、注目ポイントを動きで示せます。無料・登録不要。" />
+<link rel="canonical" href="https://flow-arrow.com/highlight.html" />
+<link rel="icon" href="/favicon.ico" sizes="32x32" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7822984542952708" crossorigin="anonymous"></script>
+<style>
+  :root { --bg:#0f1115; --panel:#181b22; --line:#2a2f3a; --txt:#e6e8ee; --muted:#9aa3b2; --accent:#4f8cff; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,"Hiragino Kaku Gothic ProN",sans-serif; background:var(--bg); color:var(--txt); }
+  header { padding:14px 20px; border-bottom:1px solid var(--line); display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+  header h1 { font-size:18px; margin:0; }
+  header h1 a { color:var(--txt); text-decoration:none; }
+  header span { color:var(--muted); font-size:13px; }
+  .gnav { margin-left:auto; display:flex; gap:14px; font-size:13px; flex-wrap:wrap; }
+  .gnav a { color:var(--muted); text-decoration:none; }
+  .gnav a:hover { color:var(--accent); }
+  .wrap { display:flex; gap:16px; padding:16px; align-items:flex-start; flex-wrap:wrap; }
+  .stage { flex:1 1 480px; }
+  .canvas-box {
+    background-image:
+      linear-gradient(45deg,#20242c 25%,transparent 25%),
+      linear-gradient(-45deg,#20242c 25%,transparent 25%),
+      linear-gradient(45deg,transparent 75%,#20242c 75%),
+      linear-gradient(-45deg,transparent 75%,#20242c 75%);
+    background-size:24px 24px; background-position:0 0,0 12px,12px -12px,-12px 0;
+    background-color:#171a20; border:1px solid var(--line); border-radius:10px; overflow:hidden;
+  }
+  canvas { display:block; width:100%; height:auto; }
+  .sample { position:relative; }
+  .sample .under { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#5a6376; font-size:34px; font-weight:700; pointer-events:none; }
+  .panel { flex:0 0 300px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:14px; }
+  .row { margin:10px 0; }
+  .row label { display:block; font-size:12px; color:var(--muted); margin-bottom:4px; }
+  input[type=range]{ width:100%; }
+  select, input[type=color], input[type=number] { background:#10131a; color:var(--txt); border:1px solid var(--line); border-radius:6px; padding:6px; }
+  input[type=number]{ width:74px; }
+  .btns { display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; }
+  button { background:#222734; color:var(--txt); border:1px solid var(--line); border-radius:7px; padding:8px 12px; cursor:pointer; font-size:13px; }
+  button:hover { border-color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600; }
+  .hint { font-size:12px; color:var(--muted); line-height:1.6; }
+  .seg { display:flex; gap:6px; }
+  .seg button { flex:1; }
+  .seg button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  hr { border:none; border-top:1px solid var(--line); margin:14px 0; }
+  #status { font-size:12px; color:var(--muted); margin-top:8px; min-height:16px; }
+  .val { color:var(--txt); float:right; font-variant-numeric:tabular-nums; }
+  .content { max-width:860px; margin:8px auto 40px; padding:0 20px; line-height:1.85; }
+  .content h2 { font-size:20px; margin:30px 0 8px; }
+  .content h3 { font-size:16px; margin:22px 0 6px; color:#e6e8ee; }
+  .content p, .content li { color:#c7cdda; font-size:15px; }
+  .content .faq dt { font-weight:600; margin-top:14px; color:#e6e8ee; }
+  .content .faq dd { margin:4px 0 0; color:#aab2c2; }
+  .content a { color:var(--accent); }
+  .tip { background:var(--panel); border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:8px; padding:12px 16px; margin:16px 0; font-size:14px; color:#c7cdda; }
+  footer { text-align:center; color:var(--muted); font-size:13px; padding:24px; border-top:1px solid var(--line); }
+  footer a { color:var(--accent); }
+</style>
+</head>
+<body>
+<header>
+  <h1><a href="/">FlowArrow</a>｜強調アニメGIF作成</h1>
+  <span>丸で囲む・下線・マーカーの「手書き風強調」を透過GIFで</span>
+  <nav class="gnav">
+    <a href="/">矢印</a>
+    <a href="/spinner.html">スピナー</a>
+    <a href="/examples.html">作例</a>
+    <a href="/guide-google-slides.html">Googleスライド</a>
+    <a href="/design-tips.html">デザインのコツ</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <div class="stage">
+    <div class="canvas-box sample">
+      <div class="under">ここが重要</div>
+      <canvas id="cv" width="600" height="300"></canvas>
+    </div>
+    <p class="hint">プレビューの「ここが重要」はサンプル文字です(GIFには含まれません)。書き出したGIFを、スライド上の強調したい文字や図の上に重ねて使います。</p>
+  </div>
+
+  <div class="panel">
+    <div class="row">
+      <label>スタイル</label>
+      <div class="seg" id="style">
+        <button data-style="circle" class="on">丸で囲む</button>
+        <button data-style="underline">下線</button>
+        <button data-style="marker">マーカー</button>
+      </div>
+    </div>
+    <div class="row"><label>色</label><input type="color" id="color" value="#e5484d"></div>
+    <div class="row"><label>線の太さ <span class="val" id="thickV"></span></label><input type="range" id="thick" min="4" max="30" value="10"></div>
+    <div class="row"><label>アニメの長さ(秒) <span class="val" id="cycleV"></span></label><input type="range" id="cycle" min="1" max="4" step="0.1" value="2"></div>
+    <hr>
+    <div class="row">
+      <label>フチ合わせ色(貼り先の背景色に合わせる)</label>
+      <input type="color" id="matte" value="#ffffff">
+      <span class="hint">この色がGIFで透明になります。マーカーの半透明の色味もこの色と混ざるため、必ず貼り先の背景色に合わせてください。</span>
+    </div>
+    <div class="row">
+      <label>書き出しサイズ</label>
+      <div class="btns">
+        <span class="hint">幅 <input type="number" id="ow" value="600"> × 高 <input type="number" id="oh" value="300"></span>
+      </div>
+    </div>
+    <hr>
+    <div class="btns">
+      <button id="export" class="primary">GIF書き出し</button>
+    </div>
+    <div id="status"></div>
+  </div>
+</div>
+
+<div class="adslot" style="max-width:860px; margin:14px auto; min-height:90px; display:flex; align-items:center; justify-content:center; color:#3a4150; font-size:12px; border:1px dashed #2a2f3a; border-radius:8px;">広告枠(準備中)</div>
+
+<section class="content">
+  <h2>「丸で囲む」「下線」「マーカー」の強調アニメをGIFで</h2>
+  <p>このページは、スライドの注目ポイントを<b>手書き風のアニメーション</b>で強調するためのGIFを作れる無料ツールです。赤ペンでぐるっと丸を描く、下線をすっと引く、蛍光マーカーを走らせる — 紙の資料で自然にやっていた強調を、Googleスライド・PowerPoint・Notionの上で再現できます。</p>
+  <p>書き出されるのは<b>強調の動きだけが入った透過GIF</b>です。スライド上の文字や図の上に画像として重ねれば、その場所に「あとから描き込まれる」ような演出になります。</p>
+
+  <h2>使い方</h2>
+  <ol>
+    <li><b>スタイルを選ぶ</b> — 「丸で囲む」は最重要ポイントに、「下線」はキーワードに、「マーカー」は文中の一節の強調に向いています。</li>
+    <li><b>色と太さを調整</b> — 定番は赤ペン(丸・下線)と黄色マーカーです。スライドのデザインに合わせて変えられます。</li>
+    <li><b>サイズを決める</b> — 囲みたい文字のだいたいの幅・高さに合わせて書き出しサイズを指定します(あとからスライド側でも拡大縮小できます)。</li>
+    <li><b>フチ合わせ色を設定</b> — 貼り先の背景色(白いスライドなら白)を指定します。</li>
+    <li><b>GIF書き出し</b> — <code>highlight.gif</code> がダウンロードされます。</li>
+  </ol>
+
+  <h2>スライドへの重ね方(Googleスライドの例)</h2>
+  <ol>
+    <li>挿入 → 画像 → パソコンからアップロード で書き出したGIFを挿入</li>
+    <li>強調したい文字・図の上にドラッグして位置を合わせる</li>
+    <li>サイズを微調整(GIFは図形と同じように拡大・縮小できます)</li>
+  </ol>
+  <p>GIFは常に最前面に見えるよう、必要なら右クリック → 順序 → 最前面へ移動 を使ってください。マーカーは半透明で下の文字が透けて見えるように書き出されます。</p>
+
+  <div class="tip">
+    <b>アニメの動きについて</b> — 前半で線が描かれ、後半はそのまま静止して、またループします。発表中に何度も目に入っても うるさくならないよう、描画1回+静止のゆったりしたループにしています。動きの主張を抑えたい場面のコツは<a href="/design-tips.html">動く矢印を「うるさくしない」デザインのコツ7選</a>も参考にしてください。
+  </div>
+
+  <h2>スタイル別の使いどころ</h2>
+  <h3>丸で囲む</h3>
+  <p>「結論はここ」「この数字を見てほしい」という<b>1点集中の強調</b>に。手書き風の少し歪んだ楕円が、几帳面なスライドの中で目を引きます。1スライドに1つまでが目安です。</p>
+  <h3>下線</h3>
+  <p>見出しやキーワードの強調に。丸で囲むより控えめなので、複数使っても圧が出にくいスタイルです。</p>
+  <h3>マーカー</h3>
+  <p>文章の一節を蛍光ペンでなぞる表現です。引用文や規約文の「ここを読んでほしい」という場面で効果的です。下の文字が透けるよう半透明で描画されます。</p>
+
+  <h2>よくある質問</h2>
+  <dl class="faq">
+    <dt>文字も一緒にGIFにできますか?</dt>
+    <dd>できません(その方が便利です)。文字はスライド側のテキストのまま残るので、あとから編集・翻訳ができ、画質も落ちません。GIFは強調の動きだけを担当します。</dd>
+    <dt>マーカーの色が変に見えます。</dt>
+    <dd>マーカーは半透明のため、書き出し時に「フチ合わせ色」と混ざった色になります。フチ合わせ色を貼り先の背景色に正しく合わせてください。仕組みは<a href="/gif-transparency.html">透過GIFの解説記事</a>にまとめています。</dd>
+    <dt>アニメを1回だけ再生して止められますか?</dt>
+    <dd>GoogleスライドはGIFを常にループ再生するため、1回で止める制御はできません。本ツールは「描画→静止」の間を長めにとることで、ループしても目障りになりにくくしています。</dd>
+    <dt>商用利用できますか?</dt>
+    <dd>作成したGIFは自由に使えます。商用・非商用を問わず、クレジット表記も不要です。</dd>
+  </dl>
+
+  <div class="tip">
+    <b>関連ツール・記事</b>:
+    <a href="/">流れる矢印GIFジェネレーター</a> ・
+    <a href="/spinner.html">ローディングスピナーGIF作成</a> ・
+    <a href="/guide-google-slides.html">Googleスライドに「動く矢印」を入れる方法</a>
+  </div>
+</section>
+
+<footer>
+  <a href="/">ホーム</a> ・
+  <a href="/examples.html">作例ギャラリー</a> ・
+  <a href="/guide-google-slides.html">使い方ガイド</a> ・
+  <a href="/privacy.html">プライバシーポリシー・お問い合わせ</a><br>
+  作者 <a href="https://x.com/ReactYuto" target="_blank" rel="noopener">@ReactYuto</a> ・
+  <a href="https://github.com/yutoAb/flowarrow" target="_blank" rel="noopener">GitHub</a>
+</footer>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"強調アニメGIF作成 - FlowArrow","url":"https://flow-arrow.com/highlight.html","description":"丸で囲む・下線・マーカーの手書き風強調アニメーションGIFをブラウザだけで作成できる無料ツール。スライドの注目ポイントの強調に。","applicationCategory":"DesignApplication","operatingSystem":"Web","inLanguage":"ja","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"}}
+</script>
+
+<script src="vendor/gif.js"></script>
+<script>
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const W=600, H=300; // logical size; export scales from this
+
+const S = { style:'circle', color:'#e5484d', thick:10, cycle:2, matte:'#ffffff' };
+
+const DRAW=0.45;              // fraction of the loop spent drawing; rest holds still
+function ease(p){ return p*p*(3-2*p); }
+
+function drawHi(c, u){
+  const t = ease(Math.min(1, u/DRAW));
+  if(t<=0) return;
+  c.strokeStyle=S.color; c.lineWidth=S.thick; c.lineCap='round'; c.lineJoin='round';
+  if(S.style==='circle'){
+    const cx=W/2, cy=H/2;
+    const rx=W/2-S.thick-10, ry=H/2-S.thick-10;
+    const start=-Math.PI*0.75, total=2.3*Math.PI;   // over-rotate like a real pen stroke
+    const steps=140;
+    c.beginPath();
+    for(let i=0;i<=Math.round(steps*t);i++){
+      const a=start+total*(i/steps);
+      const wob=Math.sin(a*3+0.8)*(2+S.thick*0.18); // hand-drawn wobble
+      const x=cx+(rx+wob)*Math.cos(a);
+      const y=cy+(ry+wob*0.6)*Math.sin(a);
+      i===0?c.moveTo(x,y):c.lineTo(x,y);
+    }
+    c.stroke();
+  } else if(S.style==='underline'){
+    const y=H*0.78, x0=12+S.thick/2, x1=W-12-S.thick/2;
+    const steps=90;
+    c.beginPath();
+    for(let i=0;i<=Math.round(steps*t);i++){
+      const f=i/steps;
+      const x=x0+(x1-x0)*f;
+      const yy=y+Math.sin(f*9+0.5)*2.5;             // slight hand wobble
+      i===0?c.moveTo(x,yy):c.lineTo(x,yy);
+    }
+    c.stroke();
+  } else { // marker
+    const y=H*0.52, x0=10, x1=x0+(W-20)*t;
+    c.globalAlpha=0.45; c.lineCap='butt';
+    c.lineWidth=H*0.52;
+    c.beginPath(); c.moveTo(x0,y); c.lineTo(Math.max(x0+1,x1),y); c.stroke();
+    c.globalAlpha=1;
+  }
+}
+
+function frame(now){
+  ctx.clearRect(0,0,W,H);
+  drawHi(ctx, (now/1000/S.cycle)%1);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+// ---- controls ----
+const $=id=>document.getElementById(id);
+function bindRange(id,key){ const el=$(id),v=$(id+'V');
+  const upd=()=>{S[key]=+el.value; if(v)v.textContent=el.value;}; el.oninput=upd; upd(); }
+bindRange('thick','thick'); bindRange('cycle','cycle');
+$('color').oninput=e=>S.color=e.target.value;
+$('matte').oninput=e=>S.matte=e.target.value;
+document.querySelectorAll('#style button').forEach(b=>b.onclick=()=>{
+  S.style=b.dataset.style;
+  document.querySelectorAll('#style button').forEach(x=>x.classList.toggle('on',x===b));
+  if(S.style==='marker' && $('color').value==='#e5484d'){ $('color').value='#f5d90a'; S.color='#f5d90a'; }
+});
+
+// ---- GIF export ----
+function hexInt(h){ return parseInt(h.replace('#',''),16); }
+$('export').onclick=()=>{
+  const ow=Math.max(60, +$('ow').value||600), oh=Math.max(30, +$('oh').value||300);
+  const fps=20, frames=Math.max(12, Math.min(80, Math.round(S.cycle*fps)));
+  const off=document.createElement('canvas'); off.width=ow; off.height=oh;
+  const oc=off.getContext('2d');
+  const sx=ow/W, sy=oh/H;
+  const gif=new GIF({workers:2, quality:8, width:ow, height:oh,
+    workerScript:'vendor/gif.worker.js', transparent:hexInt(S.matte)});
+  for(let f=0; f<frames; f++){
+    oc.setTransform(1,0,0,1,0,0);
+    oc.fillStyle=S.matte; oc.fillRect(0,0,ow,oh);
+    oc.setTransform(sx,0,0,sy,0,0);
+    drawHi(oc, f/frames);   // draw phase then hold = calm loop
+    gif.addFrame(oc, {copy:true, delay:Math.round(1000/fps)});
+  }
+  $('status').textContent='エンコード中…';
+  gif.on('progress', p=>{ $('status').textContent='エンコード中… '+Math.round(p*100)+'%'; });
+  gif.on('finished', blob=>{
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+    a.download='highlight.gif'; a.click();
+    $('status').textContent='完了！highlight.gif をダウンロードしました。';
+  });
+  gif.render();
+};
+</script>
+</body>
+</html>

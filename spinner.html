@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ローディングスピナーGIF作成｜くるくる回る読み込みアニメを無料で作る - FlowArrow</title>
+<meta name="description" content="くるくる回るローディングスピナーのアニメーションGIFをブラウザだけで作成。円弧・ドット・バーの3スタイル、色・太さ・速さを調整して透過GIFで書き出し。スライドやモックアップ、デモ動画に。無料・登録不要。" />
+<link rel="canonical" href="https://flow-arrow.com/spinner.html" />
+<link rel="icon" href="/favicon.ico" sizes="32x32" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7822984542952708" crossorigin="anonymous"></script>
+<style>
+  :root { --bg:#0f1115; --panel:#181b22; --line:#2a2f3a; --txt:#e6e8ee; --muted:#9aa3b2; --accent:#4f8cff; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,"Hiragino Kaku Gothic ProN",sans-serif; background:var(--bg); color:var(--txt); }
+  header { padding:14px 20px; border-bottom:1px solid var(--line); display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+  header h1 { font-size:18px; margin:0; }
+  header h1 a { color:var(--txt); text-decoration:none; }
+  header span { color:var(--muted); font-size:13px; }
+  .gnav { margin-left:auto; display:flex; gap:14px; font-size:13px; flex-wrap:wrap; }
+  .gnav a { color:var(--muted); text-decoration:none; }
+  .gnav a:hover { color:var(--accent); }
+  .wrap { display:flex; gap:16px; padding:16px; align-items:flex-start; flex-wrap:wrap; }
+  .stage { flex:1 1 420px; display:flex; justify-content:center; }
+  .canvas-box {
+    background-image:
+      linear-gradient(45deg,#20242c 25%,transparent 25%),
+      linear-gradient(-45deg,#20242c 25%,transparent 25%),
+      linear-gradient(45deg,transparent 75%,#20242c 75%),
+      linear-gradient(-45deg,transparent 75%,#20242c 75%);
+    background-size:24px 24px; background-position:0 0,0 12px,12px -12px,-12px 0;
+    background-color:#171a20; border:1px solid var(--line); border-radius:10px; overflow:hidden;
+  }
+  canvas { display:block; width:300px; height:300px; }
+  .panel { flex:0 0 300px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:14px; }
+  .row { margin:10px 0; }
+  .row label { display:block; font-size:12px; color:var(--muted); margin-bottom:4px; }
+  input[type=range]{ width:100%; }
+  select, input[type=color], input[type=number] { background:#10131a; color:var(--txt); border:1px solid var(--line); border-radius:6px; padding:6px; }
+  input[type=number]{ width:74px; }
+  .btns { display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; }
+  button { background:#222734; color:var(--txt); border:1px solid var(--line); border-radius:7px; padding:8px 12px; cursor:pointer; font-size:13px; }
+  button:hover { border-color:var(--accent); }
+  button.primary { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600; }
+  .hint { font-size:12px; color:var(--muted); line-height:1.6; }
+  .seg { display:flex; gap:6px; }
+  .seg button { flex:1; }
+  .seg button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  hr { border:none; border-top:1px solid var(--line); margin:14px 0; }
+  #status { font-size:12px; color:var(--muted); margin-top:8px; min-height:16px; }
+  .val { color:var(--txt); float:right; font-variant-numeric:tabular-nums; }
+  .content { max-width:860px; margin:8px auto 40px; padding:0 20px; line-height:1.85; }
+  .content h2 { font-size:20px; margin:30px 0 8px; }
+  .content p, .content li { color:#c7cdda; font-size:15px; }
+  .content .faq dt { font-weight:600; margin-top:14px; color:#e6e8ee; }
+  .content .faq dd { margin:4px 0 0; color:#aab2c2; }
+  .content a { color:var(--accent); }
+  .tip { background:var(--panel); border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:8px; padding:12px 16px; margin:16px 0; font-size:14px; color:#c7cdda; }
+  footer { text-align:center; color:var(--muted); font-size:13px; padding:24px; border-top:1px solid var(--line); }
+  footer a { color:var(--accent); }
+</style>
+</head>
+<body>
+<header>
+  <h1><a href="/">FlowArrow</a>｜ローディングスピナーGIF作成</h1>
+  <span>くるくる回る読み込みアニメを透過GIFで書き出す</span>
+  <nav class="gnav">
+    <a href="/">矢印</a>
+    <a href="/highlight.html">強調アニメ</a>
+    <a href="/examples.html">作例</a>
+    <a href="/guide-google-slides.html">Googleスライド</a>
+    <a href="/design-tips.html">デザインのコツ</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <div class="stage">
+    <div class="canvas-box"><canvas id="cv" width="300" height="300"></canvas></div>
+  </div>
+
+  <div class="panel">
+    <div class="row">
+      <label>スタイル</label>
+      <div class="seg" id="style">
+        <button data-style="arc" class="on">円弧</button>
+        <button data-style="dots">ドット</button>
+        <button data-style="bars">バー</button>
+      </div>
+    </div>
+    <div class="row"><label>色</label><input type="color" id="color" value="#4f8cff"></div>
+    <div class="row"><label>太さ <span class="val" id="thickV"></span></label><input type="range" id="thick" min="6" max="44" value="22"></div>
+    <div class="row"><label>1周の時間(秒) <span class="val" id="cycleV"></span></label><input type="range" id="cycle" min="0.5" max="3" step="0.1" value="1.2"></div>
+    <hr>
+    <div class="row">
+      <label>フチ合わせ色(貼り先の背景色に合わせる)</label>
+      <input type="color" id="matte" value="#ffffff">
+      <span class="hint">この色がGIFで透明になります。貼り先の背景色に合わせるとフチが目立ちません。</span>
+    </div>
+    <div class="row">
+      <label>書き出しサイズ(正方形・px)</label>
+      <input type="number" id="size" value="160" min="32" max="600">
+    </div>
+    <hr>
+    <div class="btns">
+      <button id="export" class="primary">GIF書き出し</button>
+    </div>
+    <div id="status"></div>
+  </div>
+</div>
+
+<div class="adslot" style="max-width:860px; margin:14px auto; min-height:90px; display:flex; align-items:center; justify-content:center; color:#3a4150; font-size:12px; border:1px dashed #2a2f3a; border-radius:8px;">広告枠(準備中)</div>
+
+<section class="content">
+  <h2>ローディングスピナーGIFをブラウザで作成</h2>
+  <p>このページは、<b>くるくる回るローディングスピナー(読み込み中アニメ)のGIF</b>を無料で作れるツールです。円弧・ドット・バーの3スタイルから選び、色・太さ・回転速度を調整して、<b>透過GIF</b>として書き出せます。登録・インストールは不要で、画像はすべてブラウザ内で生成されます(サーバーには何も送信されません)。</p>
+
+  <h2>使い方</h2>
+  <ol>
+    <li><b>スタイルを選ぶ</b> — 「円弧」はモダンなマテリアルデザイン風、「ドット」はやわらかい印象、「バー」はiOS風の定番スピナーです。</li>
+    <li><b>色と太さを調整</b> — 貼り先のテーマカラー(コーポレートカラーやスライドのアクセント色)に合わせると馴染みます。</li>
+    <li><b>速さを調整</b> — 1周0.8〜1.5秒程度が「読み込み中」として自然に見える速度です。</li>
+    <li><b>フチ合わせ色を設定</b> — 貼り先の背景色(白背景なら白)を指定します。GIFの透明は2値のため、フチのなめらかな部分はこの色と混ぜて焼き込まれます。</li>
+    <li><b>GIF書き出し</b> — <code>spinner.gif</code> がダウンロードされます。1周でちょうどループする継ぎ目のないGIFになります。</li>
+  </ol>
+
+  <h2>どんな場面で使える?</h2>
+  <ul>
+    <li><b>スライドのデモ・モックアップ</b> — 「ここで読み込みが走る」という画面遷移の説明に。Googleスライドでは挿入→画像でループ再生されます。</li>
+    <li><b>アプリ・Webのデザインカンプ</b> — FigmaやPowerPointで作る画面モックに読み込み中状態を再現できます。</li>
+    <li><b>デモ動画・チュートリアル動画</b> — 編集ソフトに画像として重ねるだけで「処理中」の演出になります。</li>
+    <li><b>NotionやWebページ</b> — 「準備中」「工事中」セクションのアクセントに。</li>
+  </ul>
+
+  <div class="tip">
+    <b>実装用ではなく「見せる用」です</b> — 実際のWebサイトのローディング表示にはCSSアニメーション(<code>@keyframes</code>)の方が軽量で高画質です。GIFが向いているのは、スライド・ドキュメント・動画など<b>CSSが使えない場所</b>で読み込み表現を見せたいときです。
+  </div>
+
+  <h2>よくある質問</h2>
+  <dl class="faq">
+    <dt>ループの継ぎ目が気になりませんか?</dt>
+    <dd>書き出されるGIFはちょうど1周分のフレームで構成されるため、継ぎ目なく無限ループします。</dd>
+    <dt>背景を完全に透明にできますか?</dt>
+    <dd>GIFの透明は「透明か不透明か」の2値です。フチ合わせ色を貼り先の背景色に合わせれば、実用上フチは見えなくなります。仕組みは<a href="/gif-transparency.html">透過GIFの「白いフチ」はなぜ出る?</a>で詳しく解説しています。</dd>
+    <dt>商用利用できますか?</dt>
+    <dd>作成したGIFは自由に使えます。資料・アプリ・動画など、商用・非商用を問わず利用でき、クレジット表記も不要です。</dd>
+    <dt>もっと大きいサイズで書き出せますか?</dt>
+    <dd>書き出しサイズは最大600pxまで指定できます。スライドで使う場合は120〜200px程度が扱いやすいサイズです。</dd>
+  </dl>
+
+  <div class="tip">
+    <b>関連ツール・記事</b>:
+    <a href="/">流れる矢印GIFジェネレーター</a> ・
+    <a href="/highlight.html">丸で囲む・下線の強調アニメGIF</a> ・
+    <a href="/gif-transparency.html">透過GIFの「白いフチ」はなぜ出る?</a>
+  </div>
+</section>
+
+<footer>
+  <a href="/">ホーム</a> ・
+  <a href="/examples.html">作例ギャラリー</a> ・
+  <a href="/guide-google-slides.html">使い方ガイド</a> ・
+  <a href="/privacy.html">プライバシーポリシー・お問い合わせ</a><br>
+  作者 <a href="https://x.com/ReactYuto" target="_blank" rel="noopener">@ReactYuto</a> ・
+  <a href="https://github.com/yutoAb/flowarrow" target="_blank" rel="noopener">GitHub</a>
+</footer>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"ローディングスピナーGIF作成 - FlowArrow","url":"https://flow-arrow.com/spinner.html","description":"くるくる回るローディングスピナーのアニメーションGIFをブラウザだけで作成できる無料ツール。円弧・ドット・バーの3スタイル。","applicationCategory":"DesignApplication","operatingSystem":"Web","inLanguage":"ja","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"}}
+</script>
+
+<script src="vendor/gif.js"></script>
+<script>
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const L = 300; // logical canvas size; export scales from this
+
+const S = { style:'arc', color:'#4f8cff', thick:22, cycle:1.2, matte:'#ffffff' };
+
+function drawSpinner(c, u){
+  const cx=L/2, cy=L/2, R=L*0.34;
+  c.lineCap='round';
+  if(S.style==='arc'){
+    c.strokeStyle=S.color; c.lineWidth=S.thick;
+    c.beginPath();
+    c.arc(cx, cy, R, u*2*Math.PI, u*2*Math.PI + 1.5*Math.PI);
+    c.stroke();
+  } else if(S.style==='dots'){
+    const n=12, r=S.thick*0.5;
+    c.fillStyle=S.color;
+    for(let i=0;i<n;i++){
+      const a=i/n*2*Math.PI - Math.PI/2;
+      const phase=(((u - i/n)%1)+1)%1;   // 0 = just passed = brightest
+      c.globalAlpha=0.15+0.85*(1-phase);
+      c.beginPath();
+      c.arc(cx+R*Math.cos(a), cy+R*Math.sin(a), r, 0, 7);
+      c.fill();
+    }
+    c.globalAlpha=1;
+  } else { // bars
+    const n=12;
+    c.strokeStyle=S.color; c.lineWidth=Math.max(4, S.thick*0.55);
+    for(let i=0;i<n;i++){
+      const a=i/n*2*Math.PI - Math.PI/2;
+      const phase=(((u - i/n)%1)+1)%1;
+      c.globalAlpha=0.15+0.85*(1-phase);
+      c.beginPath();
+      c.moveTo(cx+R*0.55*Math.cos(a), cy+R*0.55*Math.sin(a));
+      c.lineTo(cx+R*Math.cos(a), cy+R*Math.sin(a));
+      c.stroke();
+    }
+    c.globalAlpha=1;
+  }
+}
+
+function frame(now){
+  ctx.clearRect(0,0,L,L);
+  drawSpinner(ctx, (now/1000/S.cycle)%1);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+// ---- controls ----
+const $=id=>document.getElementById(id);
+function bindRange(id,key){ const el=$(id),v=$(id+'V');
+  const upd=()=>{S[key]=+el.value; if(v)v.textContent=el.value;}; el.oninput=upd; upd(); }
+bindRange('thick','thick'); bindRange('cycle','cycle');
+$('color').oninput=e=>S.color=e.target.value;
+$('matte').oninput=e=>S.matte=e.target.value;
+document.querySelectorAll('#style button').forEach(b=>b.onclick=()=>{
+  S.style=b.dataset.style; document.querySelectorAll('#style button').forEach(x=>x.classList.toggle('on',x===b));
+});
+
+// ---- GIF export ----
+function hexInt(h){ return parseInt(h.replace('#',''),16); }
+$('export').onclick=()=>{
+  const size=Math.max(32, Math.min(600, +$('size').value || 160));
+  const fps=20, frames=Math.max(8, Math.min(60, Math.round(S.cycle*fps)));
+  const off=document.createElement('canvas'); off.width=size; off.height=size;
+  const oc=off.getContext('2d');
+  const sc=size/L;
+  const gif=new GIF({workers:2, quality:8, width:size, height:size,
+    workerScript:'vendor/gif.worker.js', transparent:hexInt(S.matte)});
+  for(let f=0; f<frames; f++){
+    oc.setTransform(1,0,0,1,0,0);
+    oc.fillStyle=S.matte; oc.fillRect(0,0,size,size);
+    oc.setTransform(sc,0,0,sc,0,0);
+    drawSpinner(oc, f/frames);   // exactly one rotation = seamless loop
+    gif.addFrame(oc, {copy:true, delay:Math.round(1000/fps)});
+  }
+  $('status').textContent='エンコード中…';
+  gif.on('progress', p=>{ $('status').textContent='エンコード中… '+Math.round(p*100)+'%'; });
+  gif.on('finished', blob=>{
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+    a.download='spinner.gif'; a.click();
+    $('status').textContent='完了！spinner.gif をダウンロードしました。';
+  });
+  gif.render();
+};
+</script>
+</body>
+</html>
