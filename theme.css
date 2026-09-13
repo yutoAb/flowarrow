@@ -32,6 +32,9 @@ html[data-theme="light"] .content .faq dd { color:#596373; }
 html[data-theme="light"] .adslot { color:#9aa3b2; border-color:#d9dee7; }
 html[data-theme="light"] .export-bar { box-shadow:0 -8px 16px rgba(20,30,50,.12); }
 
+/* unified header (same one-line brand + nav on every page) */
+header h1 a { color:var(--txt); text-decoration:none; }
+
 /* unified header nav (same links & behavior on every page) */
 .gnav { margin-left:auto; display:flex; align-items:center; gap:14px; font-size:13px; }
 .gnav a { color:var(--muted); text-decoration:none; }
