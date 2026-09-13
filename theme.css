@@ -32,6 +32,16 @@ html[data-theme="light"] .content .faq dd { color:#596373; }
 html[data-theme="light"] .adslot { color:#9aa3b2; border-color:#d9dee7; }
 html[data-theme="light"] .export-bar { box-shadow:0 -8px 16px rgba(20,30,50,.12); }
 
+/* unified header nav (same links & behavior on every page) */
+.gnav { margin-left:auto; display:flex; align-items:center; gap:14px; font-size:13px; }
+.gnav a { color:var(--muted); text-decoration:none; }
+.gnav a:hover { color:var(--accent); }
+.gnav a.cur { color:var(--accent); font-weight:600; }
+@media (max-width:700px){
+  .gnav { margin-left:0; width:100%; flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; white-space:nowrap; padding-bottom:2px; }
+  .gnav a { flex:0 0 auto; }
+}
+
 /* toggle button (injected into .gnav by theme.js) */
 .theme-toggle {
   background:none; border:1px solid var(--line); border-radius:999px;
