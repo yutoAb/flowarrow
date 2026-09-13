@@ -1,3 +1,4 @@
 node_modules/
 *.gif
 !examples/*.gif
+qiita-draft-*.md
