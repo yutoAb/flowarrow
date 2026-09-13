@@ -43,8 +43,8 @@
     background-color:#171a20; border:1px solid var(--line); border-radius:10px; overflow:hidden;
   }
   canvas { display:block; width:100%; height:auto; cursor:crosshair; touch-action:none; }
-  .panel { flex:0 0 300px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:14px; }
-  .row { margin:10px 0; }
+  .panel { flex:0 0 300px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:12px 14px; }
+  .row { margin:8px 0; }
   .row label { display:block; font-size:12px; color:var(--muted); margin-bottom:4px; }
   input[type=range]{ width:100%; }
   select, input[type=color], input[type=number] { background:#10131a; color:var(--txt); border:1px solid var(--line); border-radius:6px; padding:6px; }
@@ -57,7 +57,11 @@
   .seg { display:flex; gap:6px; }
   .seg button { flex:1; }
   .seg button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
-  hr { border:none; border-top:1px solid var(--line); margin:14px 0; }
+  hr { border:none; border-top:1px solid var(--line); margin:10px 0; }
+  details.adv { border:1px solid var(--line); border-radius:8px; padding:6px 10px; margin:10px 0; }
+  details.adv summary { cursor:pointer; font-size:12px; color:var(--muted); user-select:none; }
+  details.adv summary:hover { color:var(--accent); }
+  .export-bar { position:sticky; bottom:0; background:var(--panel); padding-top:8px; margin:0 -14px -12px; padding-left:14px; padding-right:14px; padding-bottom:12px; border-radius:0 0 10px 10px; }
   #status { font-size:12px; color:var(--muted); margin-top:8px; min-height:16px; }
   .val { color:var(--txt); float:right; font-variant-numeric:tabular-nums; }
   .content { max-width:860px; margin:8px auto 40px; padding:0 20px; line-height:1.85; }
@@ -69,6 +73,19 @@
   .adslot { max-width:860px; margin:14px auto; min-height:90px; display:flex; align-items:center; justify-content:center; color:#3a4150; font-size:12px; border:1px dashed #2a2f3a; border-radius:8px; }
   footer { text-align:center; color:var(--muted); font-size:13px; padding:24px; border-top:1px solid var(--line); }
   footer a { color:var(--accent); }
+  @media (max-width:700px){
+    header { padding:10px 14px; row-gap:4px; }
+    header h1 { font-size:16px; }
+    header > span { display:none; }
+    .gnav { margin-left:0; width:100%; flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; white-space:nowrap; padding-bottom:2px; }
+    .gnav a { flex:0 0 auto; }
+    .wrap { padding:10px; gap:10px; }
+    /* プレビューを上部に固定: スライダー調整中も結果が見える */
+    .stage { position:sticky; top:0; z-index:5; background:var(--bg); padding-bottom:2px; }
+    .stage .hint { font-size:11px; margin:6px 0 0; }
+    .panel { flex:1 1 100%; }
+    .export-bar { box-shadow:0 -8px 16px rgba(0,0,0,.45); }
+  }
 </style>
 </head>
 <body>
@@ -125,31 +142,34 @@
     <div class="row">
       <label><input type="checkbox" id="head" checked> 終点に「く」の字の矢じり</label>
     </div>
-    <hr>
-    <div class="row">
-      <label>フチ合わせ色(スライド背景色に合わせる)</label>
-      <input type="color" id="matte" value="#ffffff">
-      <span class="hint">この色がGIFで透明になります。スライドの背景色に合わせるとフチが目立ちません。</span>
-    </div>
-    <div class="row">
-      <label>書き出しサイズ</label>
-      <div class="btns">
-        <span class="hint">幅 <input type="number" id="ow" value="900"> × 高 <input type="number" id="oh" value="470"></span>
+    <details class="adv">
+      <summary>詳細設定(フチ色・サイズ・コマ数)</summary>
+      <div class="row">
+        <label>フチ合わせ色(スライド背景色に合わせる)</label>
+        <input type="color" id="matte" value="#ffffff">
+        <span class="hint">この色がGIFで透明になります。貼り先の背景色に合わせるとフチが目立ちません。</span>
       </div>
-    </div>
-    <div class="row">
-      <label>コマ数 / FPS</label>
-      <div class="btns">
-        <span class="hint"><input type="number" id="frames" value="24"> コマ / <input type="number" id="fps" value="14"> fps</span>
+      <div class="row">
+        <label>書き出しサイズ</label>
+        <div class="btns">
+          <span class="hint">幅 <input type="number" id="ow" value="900"> × 高 <input type="number" id="oh" value="470"></span>
+        </div>
       </div>
+      <div class="row">
+        <label>コマ数 / FPS</label>
+        <div class="btns">
+          <span class="hint"><input type="number" id="frames" value="24"> コマ / <input type="number" id="fps" value="14"> fps</span>
+        </div>
+      </div>
+    </details>
+    <div class="export-bar">
+      <div class="btns">
+        <button id="undo">1点戻す</button>
+        <button id="clear">クリア</button>
+        <button id="export" class="primary">GIF書き出し</button>
+      </div>
+      <div id="status"></div>
     </div>
-    <hr>
-    <div class="btns">
-      <button id="undo">1点戻す</button>
-      <button id="clear">クリア</button>
-      <button id="export" class="primary">GIF書き出し</button>
-    </div>
-    <div id="status"></div>
   </div>
 </div>
 
@@ -157,7 +177,6 @@
   手順:
   1. AdSense 管理画面で「広告ユニット(ディスプレイ広告)」を作成し、data-ad-slot の番号を控える
   2. 下の <ins> ブロックのコメントを外し、data-ad-slot を自分の値に置換
-  3. すぐ下のプレースホルダ <div class="adslot"> を削除
 <div class="adslot">
   <ins class="adsbygoogle"
        style="display:block"
@@ -168,7 +187,6 @@
   <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 </div>
 -->
-<div class="adslot">広告枠(準備中)</div>
 
 <section class="content">
   <h2>「流れる矢印」のアニメGIFをブラウザで作成</h2>
