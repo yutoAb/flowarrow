@@ -1,1 +1,3 @@
-# nothing to ignore (static site)
+node_modules/
+*.gif
+!examples/*.gif

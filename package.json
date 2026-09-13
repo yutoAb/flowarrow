@@ -1,0 +1,42 @@
+{
+  "name": "flowarrow",
+  "version": "0.1.0",
+  "description": "Generate flowing-arrow / spinner / highlight animation GIFs (transparent, slide-ready) from the CLI or via MCP. CLI/MCP companion of https://flow-arrow.com/",
+  "type": "module",
+  "bin": {
+    "flowarrow": "cli/cli.js"
+  },
+  "files": [
+    "cli"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "mcp": "node cli/cli.js mcp"
+  },
+  "keywords": [
+    "gif",
+    "arrow",
+    "animation",
+    "slides",
+    "google-slides",
+    "mcp",
+    "mcp-server",
+    "spinner",
+    "transparent-gif"
+  ],
+  "author": "yutoAb (https://x.com/ReactYuto)",
+  "license": "MIT",
+  "homepage": "https://flow-arrow.com/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yutoAb/flowarrow.git"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "canvas": "^3.1.0",
+    "gifenc": "^1.0.3",
+    "zod": "^3.24.0"
+  }
+}
