@@ -87,6 +87,8 @@
     .export-bar { box-shadow:0 -8px 16px rgba(0,0,0,.45); }
   }
 </style>
+<link rel="stylesheet" href="/theme.css" />
+<script src="/theme.js"></script>
 </head>
 <body>
 <header>
@@ -354,7 +356,8 @@ function frame(now){
   }
   drawScene(ctx, path, u);
   // editing handles
-  pts.forEach((p,i)=>{ ctx.fillStyle = i===0 ? '#4f8cff' : '#cfd6e4';
+  const handleCol = document.documentElement.dataset.theme==='light' ? '#7d8798' : '#cfd6e4';
+  pts.forEach((p,i)=>{ ctx.fillStyle = i===0 ? '#4f8cff' : handleCol;
     ctx.beginPath(); ctx.arc(p[0],p[1], i===0?7:5, 0, 7); ctx.fill(); });
   requestAnimationFrame(frame);
 }
